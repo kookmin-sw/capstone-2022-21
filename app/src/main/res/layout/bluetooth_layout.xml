@@ -1,0 +1,286 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    tools:context=".MainActivity">
+
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:orientation="vertical">
+
+            <TextView
+                android:id="@+id/title1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:background="#ff9999"
+                android:padding="6dp"
+                android:text="기능 사용"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp" />
+
+            <Switch
+                android:id="@+id/function_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="톡닥톡닥 이용하기"
+                android:padding="14dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:checked="true"
+                />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:background="#ff9999">
+
+                <TextView
+                    android:id="@+id/title2"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:background="#ff9999"
+                    android:padding="6dp"
+                    android:text="알림 안내 권한"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/alarm_permission_setting"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#ff9999"
+                    android:backgroundTint="#ff6666"
+                    android:text="설정" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/permission_state_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:clickable="false"
+                android:padding="14dp"
+                android:text="권한 허용 여부"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="8"
+                android:background="#ff9999"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/title3"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="8"
+                    android:background="#ff9999"
+                    android:padding="6dp"
+                    android:text="블루투스 연결"
+                    android:textColor="#FFFFFF"
+                    android:textSize="16dp" />
+
+                <Button
+                    android:id="@+id/bluetooth_setting_btn"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:background="#ff9999"
+                    android:backgroundTint="#ff6666"
+                    android:text="설정" />
+            </LinearLayout>
+
+            <Switch
+                android:id="@+id/bluetooth_state"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="현재 상태"
+                android:padding="14dp"
+                android:textSize="20dp"
+                android:textStyle="bold"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <Button
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:background="#ff9999"
+                    android:backgroundTint="#ff6666"
+                    android:gravity="start"
+                    android:padding="14dp"
+                    android:text="연결된 기기"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <TextView
+                    android:id="@+id/tv_paired"
+                    android:layout_width="match_parent"
+                    android:layout_height="wrap_content"
+                    android:gravity="center"
+                    android:text="없음"
+                    android:textSize="18sp" />
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title4"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="사운드 설정"
+                android:background="#ff9999"
+                android:padding="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal"
+                >
+
+                <TextView
+                    android:id="@+id/textView10"
+                    android:layout_width="180dp"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:padding="14dp"
+                    android:text="볼륨"
+                    android:textSize="20dp"
+                    android:textStyle="bold" />
+
+                <SeekBar
+                    android:id="@+id/sound_bar"
+                    android:layout_width="match_parent"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:layout_weight="1"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView11"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="읽기 속도"
+                    android:padding="14dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+
+                <Spinner
+                    android:id="@+id/spinner"
+                    android:layout_width="wrap_content"
+                    android:layout_height="match_parent"
+                    android:layout_weight="1" />
+
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title5"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="읽기 설정"
+                android:background="#ff9999"
+                android:padding="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <LinearLayout
+                android:layout_width="match_parent"
+                android:layout_height="match_parent"
+                android:orientation="horizontal">
+
+                <TextView
+                    android:id="@+id/textView12"
+                    android:layout_width="wrap_content"
+                    android:layout_height="wrap_content"
+                    android:layout_weight="1"
+                    android:text="TTS 엔진 설정"
+                    android:padding="14dp"
+                    android:textSize="20dp"
+                    android:textStyle="bold"/>
+            </LinearLayout>
+
+            <TextView
+                android:id="@+id/title6"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="알림 설정"
+                android:background="#ff9999"
+                android:padding="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <Switch
+                android:id="@+id/notice_sound_switch"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="수신 시 알림음 재생"
+                android:padding="14dp"
+                android:textSize="20dp"
+                android:textStyle="bold"
+                android:checked="true"/>
+
+            <TextView
+                android:id="@+id/title7"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:text="재생 텍스트 내용 설정"
+                android:background="#ff9999"
+                android:padding="6dp"
+                android:textColor="#FFFFFF"
+                android:textSize="16dp"/>
+
+            <Switch
+                android:id="@+id/textSetting1"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="14dp"
+                android:text="발신자"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/textSetting2"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="14dp"
+                android:text="발신내용"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+            <Switch
+                android:id="@+id/textSetting3"
+                android:layout_width="match_parent"
+                android:layout_height="wrap_content"
+                android:checked="true"
+                android:padding="14dp"
+                android:text="발신시간"
+                android:textSize="20dp"
+                android:textStyle="bold" />
+
+        </LinearLayout>
+    </ScrollView>
+
+</LinearLayout>
