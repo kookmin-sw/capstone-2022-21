@@ -10,6 +10,7 @@ import android.content.BroadcastReceiver;
 import android.content.Context;
 import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
 import android.os.Bundle;
 import android.util.Log;
 import android.view.View;
@@ -84,13 +85,6 @@ public class BluetoothActivity extends AppCompatActivity {
             }
         });
 
-
-
-
-
-
-
-
     }
 
     //블루투스 브로드 캐스트 리시버 -
@@ -120,16 +114,20 @@ public class BluetoothActivity extends AppCompatActivity {
 
                 }
             }
+
+
         }
     };
 
-    //브로드캐스트 리시버
+    //브로드캐스트 리시버 종료
     protected void onDestroy() {
         Toast.makeText(getApplicationContext(), "onDestroy called", Toast.LENGTH_SHORT).show();
         Log.d("onDestroy", "onDestroy called");
         super.onDestroy();
         unregisterReceiver(broadcastReceiver);
     }
+
+
 
     //블루투스 초기 새팅
     void setbluetooth() {
@@ -170,8 +168,15 @@ public class BluetoothActivity extends AppCompatActivity {
 
         onOff_bt.setChecked(true);
 
+        bluetooth_setting_btn.setEnabled(true);
+
+
         Intent intentBluetoothEnable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
         startActivityForResult(intentBluetoothEnable, BT_REQUEST_ENABLE);
+
+        IntentFilter BTIntent = new IntentFilter(bluetoothAdapter.ACTION_STATE_CHANGED);
+        registerReceiver(broadcastReceiver, BTIntent);
+
 
     }
 
@@ -193,7 +198,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
     }
 
-    //블루투스 설정 버튼 클릭시 동작
+    //블루투스 onoff 스위치 클릭시 동작
     class onOffSwitchListener implements CompoundButton.OnCheckedChangeListener{
         @Override
         public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
@@ -230,10 +235,12 @@ public class BluetoothActivity extends AppCompatActivity {
 
 
 
-    // 블루투스 가능 기기 검색
+    // 연결 기기 검색
+    //특정 기기와 데이터 통신을 하려면 해당 기기와 페어링(pairing) 되어야 하는데,
+    // 그러기위해선 먼저 페어링 된 기기 목록을 가져와야 합니다.
     public void selectBluetoothDevice() {
 
-        // 이미 페어링 되어있는 블루투스 기기를 찾습니다.
+        // 이전에 페어링 되어있는 블루투스 기기를 찾습니다.
 
         devices = bluetoothAdapter.getBondedDevices();
 
@@ -345,7 +352,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
             bluetoothSocket.connect();
 
-            // 데이터 송,수신 스트림을 얻어옵니다.
+            // 데이터 송,수신
 
             outputStream = bluetoothSocket.getOutputStream();
 
@@ -357,7 +364,7 @@ public class BluetoothActivity extends AppCompatActivity {
 
         } catch (IOException e) {
 
-            e.printStackTrace();
+            Toast.makeText(getApplicationContext(), "블루투스 연결 중 오류가 발생했습니다.", Toast.LENGTH_LONG).show();
 
         }
 
