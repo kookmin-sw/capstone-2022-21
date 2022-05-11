@@ -1,5 +1,6 @@
 package com.example.myapplication;
 
+import androidx.annotation.Nullable;
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -211,8 +212,23 @@ public class BluetoothActivity extends AppCompatActivity {
         IntentFilter BTIntent = new IntentFilter(bluetoothAdapter.ACTION_STATE_CHANGED);
         registerReceiver(broadcastReceiver, BTIntent);
 
+        Intent intent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+        startActivityForResult(intent, 1);
+
 
     }
+
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+
+        switch (requestCode){
+            case 1: // 25번 줄에서 requestCode 값 1
+                if(resultCode==RESULT_OK){
+                    // 블루투스 기능을 켰을 때
+                }
+                break;
+        }
+    }// onActivityResult()..
 
 
 
