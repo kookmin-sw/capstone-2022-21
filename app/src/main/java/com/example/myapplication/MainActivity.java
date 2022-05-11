@@ -17,9 +17,9 @@ import android.widget.TextView;
 import java.util.Set;
 
 public class MainActivity extends AppCompatActivity {
-    TextView title;
-    TextView text1;
-    TextView subtext;
+    TextView title; //카카오톡 발신자
+    TextView text1; // 카카오톡 메시지
+    TextView subtext; // 카카오톡 방이름
 
 
     @Override
@@ -31,10 +31,12 @@ public class MainActivity extends AppCompatActivity {
         title = (TextView) findViewById(R.id.title) ;
         subtext = (TextView) findViewById(R.id.subtext);
 
+        //카카오톡 수신시 브로드캐스트 동작
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
 
         boolean isPermissionAllowed = isNotiPermissionAllowed();
 
+        //Notification
         if(!isPermissionAllowed) {
             Intent intent = new Intent("android.settings.ACTION_NOTIFICATION_LISTENER_SETTINGS");
             startActivity(intent);
@@ -44,7 +46,7 @@ public class MainActivity extends AppCompatActivity {
     private boolean isNotiPermissionAllowed() {
         Set<String> notiListenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
 
-        if (notiListenerSet.contains("com.kakao.talk")) {
+        if(notiListenerSet.contains(getPackageName())) {
             //카카오톡 권한 받음
             return true;
         } else {
