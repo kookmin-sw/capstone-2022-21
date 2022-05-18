@@ -2,6 +2,7 @@ package com.example.myapplication;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
+import android.content.Context;
 import android.content.res.Resources;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
@@ -105,4 +106,5 @@ public class TextToSpeach extends AppCompatActivity {
             tts = null;
         }
     }
+
 }
