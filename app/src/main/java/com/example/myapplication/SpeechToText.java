@@ -32,7 +32,6 @@ import java.util.Locale;
 
 public class SpeechToText extends AppCompatActivity {
     private TextView textView;
-    private Button button;
     private Intent intent;
     SpeechRecognizer mRecognizer;
     private TextToSpeech tts;
@@ -61,7 +60,7 @@ public class SpeechToText extends AppCompatActivity {
         });
 
         textView = findViewById(R.id.textView);
-        button = findViewById(R.id.button);
+
 
         // RecognizerIntent 생성
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
@@ -71,14 +70,13 @@ public class SpeechToText extends AppCompatActivity {
         tts.speak("답장을 하시겠습니까? ".toString(),TextToSpeech.QUEUE_FLUSH, null);
 
 
-        @Override
-        public void onClick(View v) {
-            mRecognizer = SpeechRecognizer.createSpeechRecognizer(SpeechToText.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
-            mRecognizer.setRecognitionListener(listener); // 리스너 설정
-                mRecognizer.startListening(intent); // 듣기 시작
-            }
-        });
-    }
+
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(SpeechToText.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer.setRecognitionListener(listener); // 리스너 설정
+        mRecognizer.startListening(intent); // 듣기 시작
+
+        };
+
 
     private RecognitionListener listener = new RecognitionListener() {
         @Override
