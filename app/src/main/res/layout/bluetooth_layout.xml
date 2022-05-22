@@ -23,7 +23,7 @@
                 android:background="#ff9999"
                 android:padding="6dp"
                 android:text="기능 사용"
-                android:textColor="#FFFFFF"
+                android:textColor="#5D4037"
                 android:textSize="16dp" />
 
             <Switch
@@ -127,17 +127,10 @@
                     android:textSize="20dp"
                     android:textStyle="bold" />
                 <ListView
-                    android:id="@+id/lv_paired"
+                    android:id="@+id/listview"
                     android:layout_width="match_parent"
                     android:layout_height="wrap_content"/>
 
-                <TextView
-                    android:id="@+id/tv_paired"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="없음"
-                    android:textSize="18sp" />
             </LinearLayout>
 
             <TextView
