@@ -2,365 +2,224 @@ package com.example.myapplication;
 
 import androidx.appcompat.app.AlertDialog;
 import androidx.appcompat.app.AppCompatActivity;
+import androidx.annotation.Nullable;
+import androidx.appcompat.app.AppCompatActivity;
+import androidx.core.app.ActivityCompat;
+import androidx.core.content.ContextCompat;
 
+import android.Manifest;
+import android.annotation.SuppressLint;
 import android.bluetooth.BluetoothAdapter;
 import android.bluetooth.BluetoothDevice;
+import android.bluetooth.BluetoothServerSocket;
 import android.bluetooth.BluetoothSocket;
 import android.content.BroadcastReceiver;
 import android.content.Context;
-import android.content.DialogInterface;
 import android.content.Intent;
+import android.content.IntentFilter;
+import android.content.pm.PackageManager;
+import android.media.AudioManager;
+import android.net.Uri;
+import android.os.Build;
 import android.os.Bundle;
+import android.provider.Settings;
+import android.telephony.TelephonyManager;
 import android.util.Log;
+import android.provider.Telephony;
 import android.view.View;
+import android.widget.AdapterView;
+import android.widget.ArrayAdapter;
 import android.widget.Button;
-import android.widget.CompoundButton;
+import android.widget.EditText;
+import android.widget.ListView;
+import android.widget.SeekBar;
+import android.widget.Spinner;
 import android.widget.Switch;
+import android.widget.TextView;
 import android.widget.Toast;
 
+
+import java.io.IOError;
 import java.io.IOException;
-import java.io.InputStream;
-import java.io.OutputStream;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Locale;
+
+import java.util.Date;
 import java.util.Set;
 import java.util.UUID;
+import java.io.IOException;
 
 public class BluetoothActivity extends AppCompatActivity {
 
-    private static final int REQUEST_ENABLE_BT = 10; // 블루투스 활성화 상태
-
-    private static final int BT_REQUEST_ENABLE = 1;
-
-    private BluetoothAdapter bluetoothAdapter; // 블루투스 어댑터
-
-    private Set<BluetoothDevice> devices; // 블루투스 디바이스 데이터 셋
-
-    private BluetoothDevice bluetoothDevice; // 블루투스 디바이스
-
-    private BluetoothSocket bluetoothSocket = null; // 블루투스 소켓
-
-    private OutputStream outputStream = null; // 블루투스에 데이터를 출력하기 위한 출력 스트림
-
-    private InputStream inputStream = null; // 블루투스에 데이터를 입력하기 위한 입력 스트림
-
-    private Thread workerThread = null; // 문자열 수신에 사용되는 쓰레드
-
-    private byte[] readBuffer; // 수신 된 문자열을 저장하기 위한 버퍼
-
-    private int readBufferPosition; // 버퍼 내 문자 저장 위치
+    BluetoothAdapter mBluetoothAdapter;
+    static final int REQUEST_ENABLE_BT = 3;
+    private Set<BluetoothDevice> devices;
+    private BluetoothDevice conntedDevice;
+    BluetoothSocket mBluetoothSocket;
+    BluetoothServerSocket mBluetoothServerSocket;
+    ArrayAdapter<String> adapter;
+    ListView mListView;
+    List<String> pairingList;
 
 
-    private Switch onOff_bt; // 블루투스 활성화 스위치
 
-    private Button bluetooth_setting_btn; // 블루투스 설정하기 위한 버튼
+    Switch btSwitch;
+    Button btSetting;
+// 재생 텍스트 설정
+
+
+// 블루투스 설정하기 위한 버튼
+
+    BroadcastReceiver bluetoothReceiver = new BroadcastReceiver() {
+
+        @SuppressLint("MissingPermission")
+        public void onReceive(Context context, Intent intent) {
+            String action = intent.getAction();
+            BluetoothDevice device = (BluetoothDevice) intent.getParcelableExtra("android.bluetooth.device.extra.DEVICE");
+
+            }
+
+    };
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.bluetooth_layout);
 
-        //레이아웃 블루투스 버튼 연결
-        onOff_bt = (Switch) findViewById(R.id.bluetooth_state);
+        mListView = (ListView) findViewById(R.id.listview);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+        pairingList = new ArrayList<>();
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
 
-        bluetooth_setting_btn = (Button) findViewById(R.id.bluetooth_setting_btn);
+        if (pairedDevices.size()>0) {
+            for(BluetoothDevice device : pairedDevices) {
+                pairingList.add(device.getName() + "\n" + device.getAddress());
+            }
+        }
 
-        onOff_bt.setOnCheckedChangeListener(new onOffSwitchListener());
+        adapter = new ArrayAdapter<String>(getApplicationContext(), android.R.layout.simple_list_item_1,pairingList);
+        mListView.setAdapter(adapter);
 
-        //블루투스 어댑터
-        bluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
-
-        setbluetooth();
-
-        bluetooth_setting_btn.setOnClickListener(new Button.OnClickListener() {
+        mListView.setOnItemClickListener(new AdapterView.OnItemClickListener() {
             @Override
-            public void onClick(View view) {
-
-                //블루투스 연결 기기 확인
-
-                selectBluetoothDevice();
-
-
+            public void onItemClick(AdapterView<?> adapterView, View view, int i, long l) {
+                String selectedItem = (String) adapterView.getItemAtPosition(i);
+                Toast.makeText(getApplicationContext(),"연결기기: " + selectedItem, Toast.LENGTH_SHORT).show();
             }
         });
 
 
 
+// 블루투스 기능
+        btSetting = findViewById(R.id.bluetooth_setting_btn);
+        btSetting.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(Settings.ACTION_BLUETOOTH_SETTINGS);
+                startActivityForResult(intent, 0); //startActivityForResult() 는 호출한 Activity로 부터 결과를 받을 경우 사용.
+            }
+        });
+        btSwitch = findViewById(R.id.bluetooth_state);
+        mBluetoothAdapter = BluetoothAdapter.getDefaultAdapter();
+
+
+//블루투스 설정
+        registerReceiver(this.bluetoothReceiver, new IntentFilter("android.bluetooth.device.action.ACL_CONNECTED"));
+        registerReceiver(this.bluetoothReceiver, new IntentFilter("android.bluetooth.device.action.ACL_DISCONNECTED"));
+    }
+
+    //블루투스 어댑터
+    @Override
+    protected void onResume() {
+        super.onResume();
+
+        if (!mBluetoothAdapter.isEnabled()) {
+            btSwitch.setChecked(false);
+        } else {
+            btSwitch.setChecked(true);
+        }
 
 
 
+        if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+// TODO: Consider calling
+// ActivityCompat#requestPermissions
+// here to request the missing permissions, and then overriding
+// public void onRequestPermissionsResult(int requestCode, String[] permissions,
+// int[] grantResults)
+// to handle the case where the user grants the permission. See the documentation
+// for ActivityCompat#requestPermissions for more details.
+            return;
+        }
+        devices = mBluetoothAdapter.getBondedDevices();
+        if (devices.size() > 0) {
+// Toast.makeText(getApplicationContext(),"0"+mBluetoothAdapter.getRemoteDevice("18:54:CF:C8:16:EA").getName(), Toast.LENGTH_SHORT).show(); // 저 주소해당되는 페어링된 기기 이름
+// Toast.makeText(getApplicationContext(),"1"+mBluetoothAdapter.getRemoteDevice(mBluetoothAdapter.getAddress()).getName(), Toast.LENGTH_SHORT).show(); // 핸드폰의 주소의 네임을 하는듯
 
+// Toast.makeText(getApplicationContext(),"addr list"+"/"+devices.toString(), Toast.LENGTH_SHORT).show(); //페어링된 기기들의 리스트
+            Log.d("TAG", devices.toString());
+
+            for (int i = 0; i < devices.size(); i++) {
+// Toast.makeText(getApplicationContext(),"i"+i+"/"+devices.toArray()[i], Toast.LENGTH_SHORT).show();
+// mBluetoothAdapter.getState()//12나옴 mBluetoothAdapter.getRemoteDevice(devices.toArray()[i]+"").getBondState() 동일하게 12
+                Log.d("TAG", "[" + devices.toArray()[i] + "]" + mBluetoothAdapter.getRemoteDevice(devices.toArray()[i] + "").getName() + " bondstate:" + mBluetoothAdapter.getRemoteDevice(devices.toArray()[i] + "").getBondState() + " getstate:" + mBluetoothAdapter.getState());
+// mBluetoothAdapter.getRemoteDevice("");
+// if (mBluetoothSocket.isConnected())
+// {
+// Log.d("TAG","YYYYYYYYEEEEEEEEESSSSSS");
+// }
+            }
+        }
+
+        Set<BluetoothDevice> pairedDevices = mBluetoothAdapter.getBondedDevices();
+        if (pairedDevices == null || pairedDevices.size() == 0) {
+            Toast.makeText(getApplicationContext(), "No Paired Devices Found", Toast.LENGTH_SHORT).show();
+        } else {
+            ArrayList<BluetoothDevice> list = new ArrayList<BluetoothDevice>();
+            list.addAll(pairedDevices);
+
+// Toast.makeText(getApplicationContext(),"list2 "+pairedDevices.toString(),Toast.LENGTH_SHORT).show(); // devices랑 똑같이 페어링된 기기목록
+            Toast.makeText(getApplicationContext(), "2" + list.get(1).getName(), Toast.LENGTH_SHORT).show();
+        }
+
+        {
+
+// Toast.makeText(getApplicationContext(),"3"+mBluetoothAdapter.getState()+mBluetoothAdapter.getAddress(),Toast.LENGTH_SHORT).show();
+// Toast.makeText(getApplicationContext(),"4"+mBluetoothAdapter.getBluetoothLeScanner().toString(),Toast.LENGTH_SHORT).show(); //이상한거나옴
+// Toast.makeText(getApplicationContext(),"5"+mBluetoothAdapter.getRemoteDevice("18:54:CF:C8:16:EA").getName(),Toast.LENGTH_SHORT).show(); // 저 주소해당되는 페어링된 기기 이름
+// Toast.makeText(getApplicationContext(),"5"+mBluetoothAdapter.getBluetoothLeScanner(),Toast.LENGTH_SHORT).show(); //이상한주소같은느낌
+        }
 
     }
 
-    //블루투스 브로드 캐스트 리시버 -
-    private final BroadcastReceiver broadcastReceiver = new BroadcastReceiver() {
-        @Override
-        public void onReceive(Context context, Intent intent) {
-            String action = intent.getAction();
+    @Override
+    protected void onStart() {
+        super.onStart();
 
-            if (action.equals(bluetoothAdapter.ACTION_STATE_CHANGED)){
-                final int state = intent.getIntExtra(BluetoothAdapter.EXTRA_STATE, bluetoothAdapter.ERROR);
-
-                switch (state) {
-                    case BluetoothAdapter.STATE_ON:
-                        on();
-                        break;
-                    case BluetoothAdapter.STATE_OFF:
-                        off();
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_ON:
-                        on();
-                        Toast.makeText(getApplicationContext(), "변경중", Toast.LENGTH_SHORT).show();
-                        break;
-                    case BluetoothAdapter.STATE_TURNING_OFF:
-                        off();
-                        Toast.makeText(getApplicationContext(), "변경중", Toast.LENGTH_SHORT).show();
-                        break;
-
+        if (mBluetoothAdapter == null) {
+//장치가 블루투스를 지원하지 않는 경우.
+            Toast.makeText(getApplicationContext(), "블루투스 기능을 지원하지 않음", Toast.LENGTH_SHORT).show();
+            finish();
+        } else {
+// 장치가 블루투스를 지원하는 경우.
+            if (!mBluetoothAdapter.isEnabled()) {
+// 블루투스 활성화 요청
+                Intent enableBtIntent = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
+                if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {
+// TODO: Consider calling
+// ActivityCompat#requestPermissions
+// here to request the missing permissions, and then overriding
+// public void onRequestPermissionsResult(int requestCode, String[] permissions,
+// int[] grantResults)
+// to handle the case where the user grants the permission. See the documentation
+// for ActivityCompat#requestPermissions for more details.
+                    return;
                 }
+                startActivityForResult(enableBtIntent, REQUEST_ENABLE_BT);
             }
         }
-    };
-
-    //브로드캐스트 리시버
-    protected void onDestroy() {
-        Toast.makeText(getApplicationContext(), "onDestroy called", Toast.LENGTH_SHORT).show();
-        Log.d("onDestroy", "onDestroy called");
-        super.onDestroy();
-        unregisterReceiver(broadcastReceiver);
-    }
-
-    //블루투스 초기 새팅
-    void setbluetooth() {
-
-        if (bluetoothAdapter == null){
-            //디바이스 자체에 블루투스 기능이 없을 경우
-            Toast.makeText( getApplicationContext(), "블루투스를 지원하지 않는 기기입니다.", Toast.LENGTH_LONG).show();
-
-            //디바이스 사용 불가
-            onOff_bt.setText("Disabled Device");
-
-            onOff_bt.setEnabled(false);
-
-            bluetooth_setting_btn.setEnabled(false);
-
-        }
-        else { // 디바이스가 블루투스를 지원 할 경우
-
-            if(bluetoothAdapter.isEnabled()) { // 블루투스 활성화 상태
-                on();
-            }
-            else { // 블루투스 비활성화 상태
-                off();
-            }
-
-        }
-    }
-
-    void on() {
-
-        // 활성화
-
-        bluetoothAdapter.enable();
-
-        onOff_bt.setText("ON");
-
-        // 블루투스 스위치 on
-
-        onOff_bt.setChecked(true);
-
-        Intent intentBluetoothEnable = new Intent(BluetoothAdapter.ACTION_REQUEST_ENABLE);
-        startActivityForResult(intentBluetoothEnable, BT_REQUEST_ENABLE);
-
-    }
-
-
-
-
-    void off(){
-
-        bluetoothAdapter.disable();
-
-        bluetooth_setting_btn.setEnabled(false);
-
-        onOff_bt.setText("OFF");
-
-        // 블루투스 스위치 oFF
-
-        onOff_bt.setChecked(false);
-
-
-    }
-
-    //블루투스 설정 버튼 클릭시 동작
-    class onOffSwitchListener implements CompoundButton.OnCheckedChangeListener{
-        @Override
-        public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-            if(isChecked) {
-
-                on();
-
-                Toast.makeText(getApplicationContext(), "블루투스 ON", Toast.LENGTH_SHORT).show();
-
-
-            }else {
-
-                off();
-
-                Toast.makeText(getApplicationContext(), "블루투스 OFF", Toast.LENGTH_SHORT).show();;
-            }
-        }
-    }
-
-    //검색 가능 상태인지 확인
-    public void ensureDiscoverable(){
-        //블루투스 디바이스 검색 상태
-        if (bluetoothAdapter.getScanMode() != BluetoothAdapter.SCAN_MODE_CONNECTABLE_DISCOVERABLE){
-            //검색 가능 상태 허용 시스템 액티비티
-            Intent discoverableIntent = new Intent(bluetoothAdapter.ACTION_REQUEST_DISCOVERABLE);
-            //extra_discoverable_duration : 검색가능한 상태 300초
-            discoverableIntent.putExtra(BluetoothAdapter.EXTRA_DISCOVERABLE_DURATION,300);
-            startActivity(discoverableIntent);
-        }
-    }
-
-
-
-
-
-
-    // 블루투스 가능 기기 검색
-    public void selectBluetoothDevice() {
-
-        // 이미 페어링 되어있는 블루투스 기기를 찾습니다.
-
-        devices = bluetoothAdapter.getBondedDevices();
-
-        // 페어링 된 디바이스의 크기를 저장
-
-        int pariedDeviceCount = devices.size();
-
-        // 페어링 되어있는 장치가 없는 경우
-
-        if (pariedDeviceCount == 0) {
-
-            Toast.makeText(getApplicationContext(), "페어링된 기기가 없습니다.", Toast.LENGTH_SHORT).show();
-
-
-        }
-
-        // 페어링 되어있는 장치가 있는 경우
-
-        else {
-
-            // 디바이스를 선택하기 위한 다이얼로그 생성
-
-            AlertDialog.Builder builder = new AlertDialog.Builder(this);
-
-            builder.setTitle("페어링 되어있는 디바이스 목록");
-
-            // 페어링 된 각각의 디바이스의 이름과 주소를 저장
-
-            List<String> list = new ArrayList<>();
-
-            // 모든 디바이스의 이름을 리스트에 추가
-
-            for (BluetoothDevice bluetoothDevice : devices) {
-
-                list.add(bluetoothDevice.getName());
-
-            }
-
-            list.add("취소");
-
-
-            // List를 CharSequence 배열로 변경
-
-            final CharSequence[] charSequences = list.toArray(new CharSequence[list.size()]);
-
-            list.toArray(new CharSequence[list.size()]);
-
-
-            // 해당 아이템을 눌렀을 때 호출 되는 이벤트 리스너
-
-            builder.setItems(charSequences, new DialogInterface.OnClickListener() {
-
-                @Override
-
-                public void onClick(DialogInterface dialog, int which) {
-
-                    // 해당 디바이스와 연결하는 함수 호출
-
-                    connectDevice(charSequences[which].toString());
-
-                }
-
-            });
-
-
-            // 뒤로가기 버튼 누를 때 창이 안닫히도록 설정
-
-            builder.setCancelable(false);
-
-            // 다이얼로그 생성
-
-            AlertDialog alertDialog = builder.create();
-
-            alertDialog.show();
-
-        }
-    }
-
-
-
-    // 해당 기기와 연결
-    public void connectDevice(String deviceName) {
-
-        // 페어링 된 디바이스들을 모두 탐색하여 해당 기기 찾음
-
-        for(BluetoothDevice tempDevice : devices) {
-
-            // 사용자가 선택한 이름과 같은 디바이스로 설정하고 반복문 종료
-
-            if(deviceName.equals(tempDevice.getName())) {
-
-                bluetoothDevice = tempDevice;
-
-                break;
-
-            }
-
-        }
-
-        // UUID 생성
-
-        UUID uuid = java.util.UUID.fromString("00001101-0000-1000-8000-00805f9b34fb");
-
-        // Rfcomm 채널을 통해 블루투스 디바이스와 통신하는 소켓 생성
-
-        try {
-
-            bluetoothSocket = bluetoothDevice.createRfcommSocketToServiceRecord(uuid);
-
-            bluetoothSocket.connect();
-
-            // 데이터 송,수신 스트림을 얻어옵니다.
-
-            outputStream = bluetoothSocket.getOutputStream();
-
-            inputStream = bluetoothSocket.getInputStream();
-
-            // 데이터 송신 함수 호출
-
-            //sendData(); //미구현
-
-        } catch (IOException e) {
-
-            e.printStackTrace();
-
-        }
-
     }
 
 
