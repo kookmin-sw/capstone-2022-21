@@ -7,26 +7,110 @@
     android:orientation="vertical">
 
     <Switch
-        android:id="@+id/alarm"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="발신자만 알림받기"
-        android:padding="14dp"
-        android:textSize="20dp"
-        android:textStyle="bold"
-        android:checked="true"
-        tools:ignore="MissingConstraints" />
-
-    <Switch
-        android:id="@+id/select"
+        android:id="@+id/onOff"
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:checked="true"
         android:padding="14dp"
-        android:text="알림받을 친구 선택"
+        android:text="집중모드 on/off"
         android:textSize="20dp"
         android:textStyle="bold"
         tools:ignore="MissingConstraints"
         tools:layout_editor_absoluteX="0dp"
-        tools:layout_editor_absoluteY="55dp" />
+        tools:layout_editor_absoluteY="512dp" />
+
+    <Switch
+        android:id="@+id/auto"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:padding="14dp"
+        android:text="자동집중전환"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="16dp"
+        tools:layout_editor_absoluteY="677dp" />
+
+    <Switch
+        android:id="@+id/onlyName"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:checked="true"
+        android:padding="14dp"
+        android:text="발신자만 알림받기"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        tools:ignore="MissingConstraints"
+        tools:layout_editor_absoluteX="-16dp"
+        tools:layout_editor_absoluteY="567dp" />
+
+    <TextView
+        android:id="@+id/selection"
+        android:layout_width="312dp"
+        android:layout_height="49dp"
+        android:layout_marginTop="3dp"
+        android:layout_marginBottom="3dp"
+        android:layout_weight="8"
+        android:padding="10dp"
+        android:text=" 발신자 선택"
+        android:textColor="#232222"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/auto"
+        app:layout_constraintEnd_toStartOf="@+id/select_set"
+        app:layout_constraintHorizontal_bias="0.0"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onlyName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <Button
+        android:id="@+id/select_set"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginTop="3dp"
+        android:layout_marginEnd="4dp"
+        android:layout_marginBottom="4dp"
+        android:text="설정"
+        app:layout_constraintBottom_toTopOf="@+id/auto"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toBottomOf="@+id/onlyName"
+        app:layout_constraintVertical_bias="0.0" />
+
+    <ImageView
+        android:id="@+id/image_focus"
+        android:layout_width="219dp"
+        android:layout_height="214dp"
+        android:layout_marginTop="88dp"
+        app:layout_constraintBottom_toTopOf="@+id/focus_title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.484"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintVertical_bias="1.0"
+        app:srcCompat="@drawable/reading" />
+
+    <TextView
+        android:id="@+id/focus_title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="집중모드"
+        android:textColor="#0B0B0B"
+        android:textSize="20dp"
+        android:textStyle="bold"
+        app:layout_constraintBottom_toTopOf="@+id/image_focus"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
+
+    <TextView
+        android:id="@+id/text_exp"
+        android:layout_width="296dp"
+        android:layout_height="106dp"
+        android:layout_marginBottom="131dp"
+        android:text="집중모드는 공부, 일 등으로 바쁜 사용자를 위해 만들어진 기능입니다. 발신자 이름만 TTS알림을 받을 수 있고 알림받을 발신자를 선택할 수 있습니다."
+        android:textColor="#0B0B0B"
+        android:textSize="17dp"
+        app:layout_constraintBottom_toTopOf="@+id/onlyName"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent" />
 </androidx.constraintlayout.widget.ConstraintLayout>
