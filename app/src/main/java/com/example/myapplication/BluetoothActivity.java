@@ -63,7 +63,6 @@ public class BluetoothActivity extends AppCompatActivity {
     List<String> pairingList;
 
 
-
     Switch btSwitch;
     Button btSetting;
 // 재생 텍스트 설정
@@ -140,7 +139,6 @@ public class BluetoothActivity extends AppCompatActivity {
         } else {
             btSwitch.setChecked(true);
         }
-
 
 
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.BLUETOOTH_CONNECT) != PackageManager.PERMISSION_GRANTED) {

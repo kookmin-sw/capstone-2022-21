@@ -44,6 +44,7 @@ import kotlin.jvm.functions.Function2;
 
 public class KakaoService {
     Adapter adapter;
+    String Tag = "KakaoService";
 
     //send to me 나에게 카톡보내기
     public void sendmessage2(){
@@ -56,19 +57,27 @@ public class KakaoService {
 
     //send to friend 친구에게 카톡 보내기
     public void sendmessage(String person){
+
+        //기본 txt 메시지 템플릿
+        //{"object_type": "text",  "text": "톡닥",  "link": {    "mobile_web_url": " "  }   }
+        //**카카오톡 REST API 참조
         DefaultTemplate defaulttxt = new TextTemplate("톡닥톡닥",new Link());
+
+        //카카오톡 친구 찾기(검색)
+        //uuid = ["uuid"]
+        //***찾으려는 친구 역시 앱에 로그인해 권한 승인을 해주어야 검색할 수 있다
         TalkApiClient.getInstance().friends(new Function2<Friends<Friend>, Throwable, Unit>() {
             @Override
             public Unit invoke(Friends<Friend> friendFriends, Throwable throwable) {
                 if (friendFriends != null) {
-                    int num = friendFriends.getTotalCount();
 
-                    Log.i("kakaoservice","친구 : " + friendFriends);
+                    int num = friendFriends.getTotalCount();
+                    Log.i(Tag,"친구 : " + friendFriends);
 
                     for (int i = 0; i < num; i++) {
                         if (person.equals(friendFriends.getElements().get(i).getProfileNickname())) {
                             num = i;
-                            Log.i("kakaoservice", person + "의 getuuid : " + friendFriends.getElements().get(i).getUuid());
+                            Log.i(Tag, person + "의 getuuid : " + friendFriends.getElements().get(i).getUuid());
                             break;
                         }
                     }
@@ -76,12 +85,11 @@ public class KakaoService {
                     try {
                         List<String> uuid = Collections.singletonList(friendFriends.getElements().get(num).getUuid());
                         TalkApiClient.getInstance().sendDefaultMessage(uuid, defaulttxt,(result, error) ->{
-                            //{"object_type": "text",  "text": "톡닥",  "link": {    "mobile_web_url": " "  }   }
-                            //uuid = ["uuid"]
+
                             return Unit.INSTANCE;
                         });
                     } catch (Exception e) {
-                        Log.e("kakaoservice", "친구에게 메세지 보내기 실패");
+                        Log.e(Tag, "친구에게 메세지 보내기 실패");
                     }
                 } else {
                     Log.e("kakaoservice", "친구 없거나 권한 허락 안함");
@@ -89,7 +97,9 @@ public class KakaoService {
                 if(throwable != null){
                     Log.e("kakaoservice",String.valueOf(throwable));
                 }
-//
+                return null;
+
+
 //                friendFriends.getElements().stream().map((x)->{
 //                    if(x.getProfileNickname() == person){
 //                        TalkApiClient.getInstance().sendDefaultMessage(Arrays.asList(x.getUuid()),
@@ -101,7 +111,6 @@ public class KakaoService {
 //                    return null;
 //                });
 
-                return null;
             }
         });
 

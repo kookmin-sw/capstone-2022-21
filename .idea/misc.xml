@@ -3,7 +3,9 @@
   <component name="DesignSurface">
     <option name="filePathToZoomLevelMap">
       <map>
+        <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/activity_focus.xml" value="0.4" />
         <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/activity_main.xml" value="0.264" />
+        <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/activity_silent.xml" value="0.4" />
         <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/activity_stt.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/activity_tts.xml" value="0.24947916666666667" />
         <entry key="..\:/Users/JH/AndroidStudioProjects/capstone-2022-21/app/src/main/res/layout/bluetooth_layout.xml" value="0.4" />

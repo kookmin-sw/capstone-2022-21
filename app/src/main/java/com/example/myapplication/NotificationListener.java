@@ -45,23 +45,20 @@ public class NotificationListener extends NotificationListenerService {
             CharSequence text = extras.getCharSequence(Notification.EXTRA_TEXT);
             CharSequence subText = extras.getCharSequence(Notification.EXTRA_SUB_TEXT);
 
-            if(text == null){
-                return;
+            if(text != null) {
+
+                Intent msg = new Intent("Msg");
+                msg.putExtra("subtext", subText);
+                msg.putExtra("title", title);
+                msg.putExtra("text", text);
+
+                LocalBroadcastManager.getInstance(this).sendBroadcast(msg);
+
+
+                Log.i("NotificationListener", "Title(이름):" + title);
+                Log.i("NotificationListener", "Text(메세지):" + text);
+                Log.i("NotificationListener", "Sub Text(채팅방이름):" + subText);
             }
-
-            Intent msg = new Intent("Msg");
-            msg.putExtra("subtext", subText);
-            msg.putExtra("title", title);
-            msg.putExtra("text", text);
-
-            LocalBroadcastManager.getInstance(this).sendBroadcast(msg);
-
-
-
-
-            Log.i("NotificationListener", "Title(이름):" + title);
-            Log.i("NotificationListener", "Text(메세지):" + text);
-            Log.i("NotificationListener", "Sub Text(채팅방이름):" + subText);
         }
     }
 

@@ -68,7 +68,9 @@ public class MainActivity extends AppCompatActivity {
 //        BackgroundThread thread = new BackgroundThread();
 //        thread.start();
 
+        //앱 기능 onoff 여부
         onoff = (Switch) findViewById(R.id.onoff);
+
         if(onoff!=null) {
             onoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
                 /**
@@ -91,8 +93,7 @@ public class MainActivity extends AppCompatActivity {
             });
         }
 
-
-
+        //모드 설정 버튼
         mode_btn = (Button) findViewById(R.id.mode_btn);
 
         mode_btn.setOnClickListener(new View.OnClickListener() {
@@ -103,6 +104,18 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //블루투스와 TTS 세부 설정 버튼
+        bluetooth_TTS_btn = (Button) findViewById(R.id.bluetooth_TTS_btn);
+
+        bluetooth_TTS_btn.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View v) {
+                Intent intent = new Intent(MainActivity.this, BluetoothActivity.class);
+                startActivity(intent);
+            }
+        });
+
+        //앱소개
         announce = (Button) findViewById(R.id.anounce);
 
         announce.setOnClickListener(new View.OnClickListener() {
@@ -112,17 +125,19 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
+        //카카오톡 로그인 버튼 -> 답장하기위해
         ImageButton kakao_login_button = (ImageButton)findViewById(R.id.kakao_login_button);
 
         kakao_login_button.setOnClickListener(new View.OnClickListener(){
             @Override
             public void onClick(View v) {
-                // 카카오톡으로 로그인
                 if(UserApiClient.getInstance().isKakaoTalkLoginAvailable(MainActivity.this)){
+                    //카카오톡 앱으로 로그인
                     login();
                 }
                 else{
-                    accountLogin();
+                    //카카오톡 웹으로 로그인인
+                   accountLogin();
                 }
             }
         });
@@ -140,7 +155,7 @@ public class MainActivity extends AppCompatActivity {
 
     }
 
-
+    //Noti 권한 확인
     private boolean isNotiPermissionAllowed() {
         Set<String> notiListenerSet = NotificationManagerCompat.getEnabledListenerPackages(this);
         //Notification권한이 있는 경우
@@ -151,6 +166,7 @@ public class MainActivity extends AppCompatActivity {
         }
     }
 
+    //noti listener 감지시 동작할 브로트캐스트 리시버
     private BroadcastReceiver onNotice= new BroadcastReceiver() {
 
         @Override
@@ -165,11 +181,13 @@ public class MainActivity extends AppCompatActivity {
                 if (kakaosubtext == null) {
                     sentence = kakaotitle + "님께서" + kakaotext + "라고 메세지를 보냈습니다";
                 }
+
                 tts.speakMessage(sentence);
             }
         }
     };
 
+    //카카오톡 앱 로그인 함수
     public void login(){
         String TAG = "login()";
         UserApiClient.getInstance().loginWithKakaoTalk(MainActivity.this,(oAuthToken, error) -> {
@@ -183,6 +201,7 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    //카카오톡 웹 로그인
     public void accountLogin(){
         String TAG = "accountLogin()";
         UserApiClient.getInstance().loginWithKakaoAccount(this,(oAuthToken, error) -> {
@@ -223,15 +242,16 @@ public class MainActivity extends AppCompatActivity {
                     md.update(signature.toByteArray());
                     return android.util.Base64.encodeToString(md.digest(), Base64.NO_WRAP);
                 }catch (NoSuchAlgorithmException e){
-                    Log.w("getKeyHash", "Unable to get MessageDigest. signature="+signature, e);
+                    Log.w("getkeyhash", " MessageDigest Null, signature="+signature, e);
                 }
             }
         }catch(PackageManager.NameNotFoundException e){
-            Log.w("getPackageInfo", "Unable to getPackageInfo");
+            Log.w("getkeyhash", "getPackageInfo NULL");
         }
         return null;
     }
 
+    //앱 소개 알림창
     public void show(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("앱 소개");
