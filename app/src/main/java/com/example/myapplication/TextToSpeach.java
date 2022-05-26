@@ -2,17 +2,12 @@ package com.example.myapplication;
 
 import static android.speech.tts.TextToSpeech.ERROR;
 
-import android.content.Context;
-import android.content.res.Resources;
 import android.os.Bundle;
 import android.speech.tts.TextToSpeech;
 import androidx.appcompat.app.AppCompatActivity;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
-import android.widget.TextView;
-
-import androidx.appcompat.app.AppCompatActivity;
 
 import java.util.Locale;
 
@@ -105,6 +100,10 @@ public class TextToSpeach extends AppCompatActivity {
             tts.shutdown();
             tts = null;
         }
+    }
+
+    public void speakMessage(String sentence){
+        tts.speak(sentence,TextToSpeech.QUEUE_FLUSH, null);
     }
 
 }

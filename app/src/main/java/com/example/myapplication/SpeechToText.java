@@ -32,6 +32,7 @@ import java.util.Locale;
 
 public class SpeechToText extends AppCompatActivity {
     private TextView textView;
+    private Button button;
     private Intent intent;
     SpeechRecognizer mRecognizer;
     private TextToSpeech tts;
@@ -44,15 +45,15 @@ public class SpeechToText extends AppCompatActivity {
         setContentView(R.layout.activity_stt);
 
         // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
-        if(Build.VERSION.SDK_INT >= 23){
-            ActivityCompat.requestPermissions(this, new String[] {Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO},PERMISSION);
+        if (Build.VERSION.SDK_INT >= 23) {
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET,
+                    Manifest.permission.RECORD_AUDIO}, PERMISSION);
         }
 
         tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
             @Override
             public void onInit(int status) {
-                if(status != ERROR) {
+                if (status != ERROR) {
                     // 언어를 선택한다.
                     tts.setLanguage(Locale.KOREAN);
                 }
@@ -64,19 +65,17 @@ public class SpeechToText extends AppCompatActivity {
 
         // RecognizerIntent 생성
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
-        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE,getPackageName()); // 여분의 키
-        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE,"ko-KR"); // 언어 설정
+        intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName()); // 여분의 키
+        intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR"); // 언어 설정
 
-        tts.speak("답장을 하시겠습니까? ".toString(),TextToSpeech.QUEUE_FLUSH, null);
-
+        tts.speak("답장을 하시겠습니까? ".toString(), TextToSpeech.QUEUE_FLUSH, null);
 
 
         mRecognizer = SpeechRecognizer.createSpeechRecognizer(SpeechToText.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
         mRecognizer.startListening(intent); // 듣기 시작
 
-        };
-
+    }
 
     private RecognitionListener listener = new RecognitionListener() {
         @Override
