@@ -61,7 +61,7 @@ public class SpeechToText extends AppCompatActivity {
         });
 
         textView = findViewById(R.id.textView);
-        button = findViewById(R.id.button);
+
 
         // RecognizerIntent 생성
         intent = new Intent(RecognizerIntent.ACTION_RECOGNIZE_SPEECH);
