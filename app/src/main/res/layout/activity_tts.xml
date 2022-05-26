@@ -1,0 +1,55 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    >
+
+    <EditText
+        android:id="@+id/editText"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:hint="텍스트를 입력하세요."
+        />
+    <Button
+        android:id="@+id/button01"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="TTS 실행"
+        android:textColor="#000000"
+        android:textSize="18dp"/>
+    <Button
+        android:id="@+id/button02"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="TTS 목소리 톤 설정 높게 [tts.setPitch(1.5f)]"
+        android:textColor="#000000"
+        android:textSize="18dp"/>
+    <Button
+        android:id="@+id/button03"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="TTS 목소리 톤 설정 낮게 [tts.setPitch(0.5f)]"
+        android:textColor="#000000"
+        android:textSize="18dp"/>
+    <Button
+        android:id="@+id/button04"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="TTS 목소리 속도 설정 빠르게 [tts.setSpeechRate(1.5f)]"
+        android:textColor="#000000"
+        android:textSize="18dp"/>
+    <Button
+        android:id="@+id/button05"
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:layout_marginTop="20dp"
+        android:text="TTS 목소리 속도 설정 느리게 [tts.setSpeechRate(0.5f)]"
+        android:textColor="#000000"
+        android:textSize="18dp"/>
+
+</LinearLayout>

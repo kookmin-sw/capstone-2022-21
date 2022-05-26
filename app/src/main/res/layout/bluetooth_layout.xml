@@ -23,7 +23,7 @@
                 android:background="#ff9999"
                 android:padding="6dp"
                 android:text="기능 사용"
-                android:textColor="#FFFFFF"
+                android:textColor="#5D4037"
                 android:textSize="16dp" />
 
             <Switch
@@ -113,11 +113,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal">
+                android:orientation="vertical">
 
                 <Button
-                    android:id="@+id/button4"
-                    android:layout_width="wrap_content"
+                    android:id="@+id/bluetooth_paring_btn"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
                     android:background="#ff9999"
                     android:backgroundTint="#ff6666"
@@ -126,14 +126,11 @@
                     android:text="연결된 기기"
                     android:textSize="20dp"
                     android:textStyle="bold" />
-
-                <TextView
-                    android:id="@+id/tv_paired"
+                <ListView
+                    android:id="@+id/listview"
                     android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:gravity="center"
-                    android:text="없음"
-                    android:textSize="18sp" />
+                    android:layout_height="wrap_content"/>
+
             </LinearLayout>
 
             <TextView
