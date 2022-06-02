@@ -56,12 +56,12 @@ public class KakaoService {
     }
 
     //send to friend 친구에게 카톡 보내기
-    public void sendmessage(String person){
+    public void sendmessage(String person ,String msg){
 
         //기본 txt 메시지 템플릿
         //{"object_type": "text",  "text": "톡닥",  "link": {    "mobile_web_url": " "  }   }
         //**카카오톡 REST API 참조
-        DefaultTemplate defaulttxt = new TextTemplate("톡닥톡닥",new Link());
+        DefaultTemplate defaulttxt = new TextTemplate(msg,new Link());
 
         //카카오톡 친구 찾기(검색)
         //uuid = ["uuid"]

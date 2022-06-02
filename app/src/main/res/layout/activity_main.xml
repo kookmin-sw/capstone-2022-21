@@ -21,7 +21,7 @@
         android:layout_width="183dp"
         android:layout_height="wrap_content"
         android:layout_marginTop="50dp"
-        android:id="@+id/onoff"
+        android:id="@+id/onoff_btn"
         android:text="톡닥톡닥"/>
     <Button
         android:layout_width="183dp"
@@ -39,7 +39,7 @@
 
 
     <ImageButton
-        android:id="@+id/kakao_login_button"
+        android:id="@+id/kakao_login_btn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:src="@drawable/kakao_login_button"
@@ -50,6 +50,6 @@
         android:layout_width="80dp"
         android:layout_height="wrap_content"
         android:text="앱소개"
-        android:id="@+id/anounce"/>
+        android:id="@+id/anounce_btn"/>
 
 </LinearLayout>

@@ -31,36 +31,13 @@ import java.util.Locale;
 
 
 public class SpeechToText extends AppCompatActivity {
-    private TextView textView;
-    private Button button;
+    private String response;
     private Intent intent;
     SpeechRecognizer mRecognizer;
-    private TextToSpeech tts;
     boolean answer = true;
     final int PERMISSION = 1;
 
-    @Override
-    protected void onCreate(Bundle savedInstanceState) {
-        super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_stt);
-
-        // 안드로이드 6.0버전 이상인지 체크해서 퍼미션 체크
-        if (Build.VERSION.SDK_INT >= 23) {
-            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET,
-                    Manifest.permission.RECORD_AUDIO}, PERMISSION);
-        }
-
-        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
-            @Override
-            public void onInit(int status) {
-                if (status != ERROR) {
-                    // 언어를 선택한다.
-                    tts.setLanguage(Locale.KOREAN);
-                }
-            }
-        });
-
-        textView = findViewById(R.id.textView);
+    public String checkResponse(){
 
 
         // RecognizerIntent 생성
@@ -68,12 +45,12 @@ public class SpeechToText extends AppCompatActivity {
         intent.putExtra(RecognizerIntent.EXTRA_CALLING_PACKAGE, getPackageName()); // 여분의 키
         intent.putExtra(RecognizerIntent.EXTRA_LANGUAGE, "ko-KR"); // 언어 설정
 
-        tts.speak("답장을 하시겠습니까? ".toString(), TextToSpeech.QUEUE_FLUSH, null);
 
-
-        mRecognizer = SpeechRecognizer.createSpeechRecognizer(SpeechToText.this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
+        mRecognizer = SpeechRecognizer.createSpeechRecognizer(this); // 새 SpeechRecognizer 를 만드는 팩토리 메서드
         mRecognizer.setRecognitionListener(listener); // 리스너 설정
         mRecognizer.startListening(intent); // 듣기 시작
+
+        return response;
 
     }
 
@@ -152,8 +129,10 @@ public class SpeechToText extends AppCompatActivity {
             ArrayList<String> matches =
                     results.getStringArrayList(SpeechRecognizer.RESULTS_RECOGNITION);
 
+            response = "";
+
             for(int i = 0; i < matches.size() ; i++){
-                textView.setText(matches.get(i));
+                response += matches.get(i);
             }
         }
 

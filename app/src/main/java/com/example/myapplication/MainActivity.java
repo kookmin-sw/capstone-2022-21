@@ -17,6 +17,7 @@ import android.content.pm.PackageManager;
 import android.content.pm.Signature;
 import android.graphics.Color;
 import android.os.Bundle;
+import android.os.Handler;
 import android.speech.tts.TextToSpeech;
 import android.text.Html;
 import android.util.Base64;
@@ -44,11 +45,12 @@ import java.util.Set;
 public class MainActivity extends AppCompatActivity {
 
     String sentence;
-    Button bluetooth_TTS_btn, mode_btn, announce;
-    Switch onoff;
+    Button bluetooth_TTS, mode, announce;
+    ImageButton kakao_login_button;
     boolean isOnApp;
     private TextToSpeach tts;
     private KakaoService service;
+    private SpeechToText stt;
 
 
     @Override
@@ -58,8 +60,10 @@ public class MainActivity extends AppCompatActivity {
 
         //kakao 서비스 객체 생성
         service = new KakaoService();
-        // TTS를 객체 생성.
+        // TTS 객체 생성
         tts = new TextToSpeach();
+        // STT 객체 생성
+        stt = new SpeechToText();
 
         String keyHash = Utility.INSTANCE.getKeyHash(this.getApplicationContext());
         Log.d("KeyHash", getKeyHash());
@@ -68,35 +72,14 @@ public class MainActivity extends AppCompatActivity {
 //        BackgroundThread thread = new BackgroundThread();
 //        thread.start();
 
-        //앱 기능 onoff 여부
-        onoff = (Switch) findViewById(R.id.onoff);
 
-        if(onoff!=null) {
-            onoff.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
-                /**
-                 * Called when the checked state of a compound button has changed.
-                 *
-                 * @param buttonView The compound button view whose state has changed.
-                 * @param isChecked  The new checked state of buttonView.
-                 */
-                @Override
-                public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-                    if (isChecked) {
-                        onoff.setText("톡닥톡닥 켜짐");
-                        isOnApp = true;
 
-                    } else {
-                        onoff.setText("톡닥톡닥 꺼짐");
-                        isOnApp = false;
-                    }
-                }
-            });
-        }
 
-        //모드 설정 버튼
-        mode_btn = (Button) findViewById(R.id.mode_btn);
 
-        mode_btn.setOnClickListener(new View.OnClickListener() {
+        //모드 설정 버튼 - 설정 페이지 이동
+        mode = (Button) findViewById(R.id.mode_btn);
+
+        mode.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
 
@@ -104,10 +87,10 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //블루투스와 TTS 세부 설정 버튼
-        bluetooth_TTS_btn = (Button) findViewById(R.id.bluetooth_TTS_btn);
+        //블루투스와 TTS 세부 설정 버튼 - 설정 페이지 전환
+        bluetooth_TTS = (Button) findViewById(R.id.bluetooth_TTS_btn);
 
-        bluetooth_TTS_btn.setOnClickListener(new View.OnClickListener() {
+        bluetooth_TTS.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
                 Intent intent = new Intent(MainActivity.this, BluetoothActivity.class);
@@ -115,8 +98,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //앱소개
-        announce = (Button) findViewById(R.id.anounce);
+        //앱소개 - 앱 소개 알림창 제시
+        announce = (Button) findViewById(R.id.anounce_btn);
 
         announce.setOnClickListener(new View.OnClickListener() {
             @Override
@@ -125,8 +108,8 @@ public class MainActivity extends AppCompatActivity {
             }
         });
 
-        //카카오톡 로그인 버튼 -> 답장하기위해
-        ImageButton kakao_login_button = (ImageButton)findViewById(R.id.kakao_login_button);
+        //카카오톡 로그인 버튼 - 답장하기위해 필수
+        kakao_login_button = (ImageButton)findViewById(R.id.kakao_login_btn);
 
         kakao_login_button.setOnClickListener(new View.OnClickListener(){
             @Override
@@ -141,7 +124,10 @@ public class MainActivity extends AppCompatActivity {
                 }
             }
         });
+        ///버튼 등록 끝
 
+
+        //Notification 허락 여부 확인
         boolean isPermissionAllowed = isNotiPermissionAllowed();
 
         if(!isPermissionAllowed) {
@@ -149,9 +135,8 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
+        //Notification-카카오톡 메세지 수신 대기
         LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
-
-
 
     }
 
@@ -183,6 +168,20 @@ public class MainActivity extends AppCompatActivity {
                 }
 
                 tts.speakMessage(sentence);
+
+                new Handler().postDelayed(new Runnable() {
+                    @Override
+                    public void run() {
+                        tts.speakMessage("답장을 하시겠습니까?");
+                    }
+                },5000);
+
+                String response = stt.checkResponse();
+
+                tts.speakMessage(response + " 라고 " + kakaotitle + "님께 보내시겠습니다");
+
+                service.sendmessage(kakaotitle,response);
+
             }
         }
     };
@@ -255,7 +254,7 @@ public class MainActivity extends AppCompatActivity {
     public void show(){
         AlertDialog.Builder builder = new AlertDialog.Builder(this);
         builder.setTitle("앱 소개");
-        builder.setMessage("본 앱은 카카오톡 메시지 음성안내및 답장 기능을 위해 제작된 어플리케이션입니다.");
+        builder.setMessage("본 앱은 카카오톡 메시지 음성 안내 및 답장 기능을 위해 제작된 어플리케이션입니다. 음성 안내를 받고 싶다면 알림 권한을 허용해 주시고 답장하길 원하신다면 앱에 로그인 해주세요.\n!받으시는 분 또한 앱에 로그인하셔야 합니다.");
         builder.setNeutralButton("확인", new DialogInterface.OnClickListener() {
             @Override
             public void onClick(DialogInterface dialog, int which) {
