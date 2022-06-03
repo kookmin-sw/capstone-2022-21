@@ -47,10 +47,12 @@ public class MainActivity extends AppCompatActivity {
     String sentence;
     Button bluetooth_TTS, mode, announce;
     ImageButton kakao_login_button;
-    boolean isOnApp;
-    private TextToSpeach tts;
+
+    private TextToSpeach Tts;
     private KakaoService service;
     private SpeechToText stt;
+    private TextToSpeech tts;
+
 
 
     @Override
@@ -61,20 +63,28 @@ public class MainActivity extends AppCompatActivity {
         //kakao 서비스 객체 생성
         service = new KakaoService();
         // TTS 객체 생성
-        tts = new TextToSpeach();
+        Tts = new TextToSpeach();
         // STT 객체 생성
         stt = new SpeechToText();
+
+        // TTS를 생성하고 OnInitListener로 초기화 한다.
+        tts = new TextToSpeech(this, new TextToSpeech.OnInitListener() {
+            @Override
+            public void onInit(int status) {
+                if(status != ERROR) {
+                    // 언어를 선택한다.
+                    tts.setLanguage(Locale.KOREAN);
+                }
+            }
+        });
 
         String keyHash = Utility.INSTANCE.getKeyHash(this.getApplicationContext());
         Log.d("KeyHash", getKeyHash());
         Log.e("KeyHash", keyHash);
 
-//        BackgroundThread thread = new BackgroundThread();
-//        thread.start();
 
-
-
-
+        //Notification-카카오톡 메세지 수신 대기
+        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
 
         //모드 설정 버튼 - 설정 페이지 이동
         mode = (Button) findViewById(R.id.mode_btn);
@@ -135,9 +145,6 @@ public class MainActivity extends AppCompatActivity {
             startActivity(intent);
         }
 
-        //Notification-카카오톡 메세지 수신 대기
-        LocalBroadcastManager.getInstance(this).registerReceiver(onNotice, new IntentFilter("Msg"));
-
     }
 
     //Noti 권한 확인
@@ -156,34 +163,40 @@ public class MainActivity extends AppCompatActivity {
 
         @Override
         public void onReceive(Context context, Intent intent) {
-            if(isOnApp) {
-                String kakaosubtext = intent.getStringExtra("subtext");
-                String kakaotitle = intent.getStringExtra("title");
-                String kakaotext = intent.getStringExtra("text");
 
-                sentence = kakaotitle + "님께서 " + kakaosubtext + "톡방에 " + kakaotext + "라고 메세지를 보냈습니다";
+            Log.i("MainBroadcast","앱 기능 켜짐");
 
-                if (kakaosubtext == null) {
-                    sentence = kakaotitle + "님께서" + kakaotext + "라고 메세지를 보냈습니다";
-                }
+            String kakaosubtext = intent.getStringExtra("subtext");
+            String kakaotitle = intent.getStringExtra("title");
+            String kakaotext = intent.getStringExtra("text");
 
-                tts.speakMessage(sentence);
+            sentence = kakaotitle + "님께서 " + kakaosubtext + "톡방에 " + kakaotext + "라고 메세지를 보냈습니다";
 
-                new Handler().postDelayed(new Runnable() {
-                    @Override
-                    public void run() {
-                        tts.speakMessage("답장을 하시겠습니까?");
-                    }
-                },5000);
-
-                String response = stt.checkResponse();
-
-                tts.speakMessage(response + " 라고 " + kakaotitle + "님께 보내시겠습니다");
-
-                service.sendmessage(kakaotitle,response);
-
+            if (kakaosubtext == null) {
+                sentence = kakaotitle + "님께서 " + kakaotext + "라고 메세지를 보냈습니다";
             }
+
+            Log.i("MainTTS", sentence);
+
+
+            tts.speak(sentence,TextToSpeech.QUEUE_ADD, null);;
+//            Tts.speakMessage(sentence);
+
+            new Handler().postDelayed(new Runnable() {
+                @Override
+                public void run() {
+                    tts.speak("답장을 하시겠습니까?",TextToSpeech.QUEUE_ADD, null);
+                }
+            },5000);
+
+            String response = stt.checkResponse();
+
+            tts.speak(response + " 라고 " + kakaotitle + "님께 보내시겠습니다",TextToSpeech.QUEUE_ADD, null);
+
+            service.sendmessage(kakaotitle,response);
+
         }
+
     };
 
     //카카오톡 앱 로그인 함수

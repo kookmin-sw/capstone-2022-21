@@ -45,6 +45,7 @@ public class TextToSpeach extends AppCompatActivity {
                 }
             }
         });
+
         button01.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
@@ -103,7 +104,7 @@ public class TextToSpeach extends AppCompatActivity {
     }
 
     public void speakMessage(String sentence){
-        tts.speak(sentence,TextToSpeech.QUEUE_FLUSH, null);
+        tts.speak(sentence,TextToSpeech.QUEUE_ADD, null);
     }
 
 }
