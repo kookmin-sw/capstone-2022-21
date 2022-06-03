@@ -336,7 +336,10 @@ Activity Recognition Transition API
 [안드로이드 - NotificationListener를 이용하여 노티 정보 받기](https://webcache.googleusercontent.com/search?q=cache:OdbO-Q6YfaMJ:https://codechacha.com/ko/notification-listener/+&cd=10&hl=ko&ct=clnk&gl=kr)
 
 # 시연 영상
-(https://youtube.com/shorts/Q7lgsDo-XS4?feature=share)
+(https://youtube.com/shorts/1-8jTy7tvTc?feature=share)
+**톡닥톡닥 시연 영상(TTS 음성안내 및 STT 카카오톡 답장 기능)**
+(https://youtube.com/shorts/R_CfbEV7qKk?feature=share)
+**톡닥톡닥 시연 영상(STT 답장 받는 시연 영상)**
 # 팀 소개
 팀원정보 및 담당이나 사진 및 sns.
 # 사용법
