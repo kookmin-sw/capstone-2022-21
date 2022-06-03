@@ -335,8 +335,8 @@ Activity Recognition Transition API
 
 [안드로이드 - NotificationListener를 이용하여 노티 정보 받기](https://webcache.googleusercontent.com/search?q=cache:OdbO-Q6YfaMJ:https://codechacha.com/ko/notification-listener/+&cd=10&hl=ko&ct=clnk&gl=kr)
 
-# 소개 영상
-프로젝트를 소개하는 영상.
+# 시연 영상
+(https://youtube.com/shorts/Q7lgsDo-XS4?feature=share)
 # 팀 소개
 팀원정보 및 담당이나 사진 및 sns.
 # 사용법
