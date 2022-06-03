@@ -16,62 +16,10 @@
             android:layout_height="wrap_content"
             android:orientation="vertical">
 
-            <TextView
-                android:id="@+id/title1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:background="#ff9999"
-                android:padding="6dp"
-                android:text="기능 사용"
-                android:textColor="#5D4037"
-                android:textSize="16dp" />
-
-            <Switch
-                android:id="@+id/function_switch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="톡닥톡닥 이용하기"
-                android:padding="14dp"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:checked="true"
-                />
-
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:background="#ff9999">
-
-                <TextView
-                    android:id="@+id/title2"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="8"
-                    android:background="#ff9999"
-                    android:padding="6dp"
-                    android:text="알림 안내 권한"
-                    android:textColor="#FFFFFF"
-                    android:textSize="16dp" />
-
-                <Button
-                    android:id="@+id/alarm_permission_setting"
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:background="#ff9999"
-                    android:backgroundTint="#ff6666"
-                    android:text="설정" />
-            </LinearLayout>
-
-            <Switch
-                android:id="@+id/permission_state_switch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:clickable="false"
-                android:padding="14dp"
-                android:text="권한 허용 여부"
-                android:textSize="20dp"
-                android:textStyle="bold" />
+                android:background="#ff9999"/>
 
             <LinearLayout
                 android:layout_width="match_parent"
@@ -89,7 +37,8 @@
                     android:padding="6dp"
                     android:text="블루투스 연결"
                     android:textColor="#FFFFFF"
-                    android:textSize="16dp" />
+                    android:textSize="16dp"
+                    tools:ignore="TextContrastCheck,TextContrastCheck" />
 
                 <Button
                     android:id="@+id/bluetooth_setting_btn"
@@ -98,7 +47,8 @@
                     android:layout_weight="1"
                     android:background="#ff9999"
                     android:backgroundTint="#ff6666"
-                    android:text="설정" />
+                    android:text="설정"
+                    tools:ignore="TextContrastCheck" />
             </LinearLayout>
 
             <Switch
@@ -113,11 +63,11 @@
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="vertical">
+                android:orientation="horizontal">
 
                 <Button
-                    android:id="@+id/bluetooth_paring_btn"
-                    android:layout_width="match_parent"
+                    android:id="@+id/button4"
+                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:background="#ff9999"
                     android:backgroundTint="#ff6666"
@@ -125,11 +75,8 @@
                     android:padding="14dp"
                     android:text="연결된 기기"
                     android:textSize="20dp"
-                    android:textStyle="bold" />
-                <ListView
-                    android:id="@+id/listview"
-                    android:layout_width="match_parent"
-                    android:layout_height="wrap_content"/>
+                    android:textStyle="bold"
+                    tools:ignore="TextContrastCheck" />
 
             </LinearLayout>
 
@@ -137,145 +84,73 @@
                 android:id="@+id/title4"
                 android:layout_width="match_parent"
                 android:layout_height="wrap_content"
+                android:background="#ff9999"
+                android:padding="6dp"
                 android:text="사운드 설정"
-                android:background="#ff9999"
-                android:padding="6dp"
                 android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
+                android:textSize="16dp"
+                tools:ignore="TextContrastCheck,TextContrastCheck" />
 
             <LinearLayout
                 android:layout_width="match_parent"
                 android:layout_height="match_parent"
-                android:orientation="horizontal"
-                >
+                android:orientation="vertical">
 
-                <TextView
-                    android:id="@+id/textView10"
-                    android:layout_width="180dp"
-                    android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:padding="14dp"
-                    android:text="볼륨"
-                    android:textSize="20dp"
-                    android:textStyle="bold" />
-
-                <SeekBar
-                    android:id="@+id/sound_bar"
+                <EditText
+                    android:id="@+id/editText"
                     android:layout_width="match_parent"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
-
-            </LinearLayout>
-
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:layout_weight="1"
-                android:orientation="horizontal">
-
-                <TextView
-                    android:id="@+id/textView11"
-                    android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="읽기 속도"
-                    android:padding="14dp"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:hint="텍스트를 입력하세요."
+                    android:minHeight="48dp" />
 
-                <Spinner
-                    android:id="@+id/spinner"
-                    android:layout_width="wrap_content"
-                    android:layout_height="match_parent"
-                    android:layout_weight="1" />
+                <Button
+                    android:id="@+id/button01"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="TTS 실행"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
 
-            </LinearLayout>
+                <Button
+                    android:id="@+id/button02"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="TTS 목소리 톤 설정 높게 [tts.setPitch(1.5f)]"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
 
-            <TextView
-                android:id="@+id/title5"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="읽기 설정"
-                android:background="#ff9999"
-                android:padding="6dp"
-                android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
+                <Button
+                    android:id="@+id/button03"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="TTS 목소리 톤 설정 낮게 [tts.setPitch(0.5f)]"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
 
-            <LinearLayout
-                android:layout_width="match_parent"
-                android:layout_height="match_parent"
-                android:orientation="horizontal">
+                <Button
+                    android:id="@+id/button04"
+                    android:layout_width="match_parent"
+                    android:layout_height="50dp"
+                    android:layout_marginTop="20dp"
+                    android:text="TTS 목소리 속도 설정 빠르게 [tts.setSpeechRate(1.5f)]"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
 
-                <TextView
-                    android:id="@+id/textView12"
-                    android:layout_width="wrap_content"
+                <Button
+                    android:id="@+id/button05"
+                    android:layout_width="match_parent"
                     android:layout_height="wrap_content"
-                    android:layout_weight="1"
-                    android:text="TTS 엔진 설정"
-                    android:padding="14dp"
-                    android:textSize="20dp"
-                    android:textStyle="bold"/>
+                    android:layout_marginTop="20dp"
+                    android:text="TTS 목소리 속도 설정 느리게 [tts.setSpeechRate(0.5f)]"
+                    android:textColor="#000000"
+                    android:textSize="18dp" />
+
             </LinearLayout>
 
-            <TextView
-                android:id="@+id/title6"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="알림 설정"
-                android:background="#ff9999"
-                android:padding="6dp"
-                android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
 
-            <Switch
-                android:id="@+id/notice_sound_switch"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="수신 시 알림음 재생"
-                android:padding="14dp"
-                android:textSize="20dp"
-                android:textStyle="bold"
-                android:checked="true"/>
-
-            <TextView
-                android:id="@+id/title7"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:text="재생 텍스트 내용 설정"
-                android:background="#ff9999"
-                android:padding="6dp"
-                android:textColor="#FFFFFF"
-                android:textSize="16dp"/>
-
-            <Switch
-                android:id="@+id/textSetting1"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:padding="14dp"
-                android:text="발신자"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <Switch
-                android:id="@+id/textSetting2"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:padding="14dp"
-                android:text="발신내용"
-                android:textSize="20dp"
-                android:textStyle="bold" />
-
-            <Switch
-                android:id="@+id/textSetting3"
-                android:layout_width="match_parent"
-                android:layout_height="wrap_content"
-                android:checked="true"
-                android:padding="14dp"
-                android:text="발신시간"
-                android:textSize="20dp"
-                android:textStyle="bold" />
 
         </LinearLayout>
     </ScrollView>
